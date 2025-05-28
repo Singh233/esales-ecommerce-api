@@ -1,0 +1,47 @@
+services:
+  node-app:
+    container_name: esales-ecommerce-api
+    build: .
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mongodb
+      - redis
+    volumes:
+      - .:/app
+      - .:/usr/src/node-app
+    env_file:
+      - .env
+    restart: unless-stopped
+    command: npm run dev
+    networks:
+      - node-network
+
+  mongodb:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - dbdata:/data/db
+    networks:
+      - node-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data/redis
+    restart: unless-stopped
+    command: redis-server --save 60 1 --loglevel warning
+    networks:
+      - node-network
+
+volumes:
+  dbdata:
+  redis_data:
+
+networks:
+  node-network:
+    driver: bridge
