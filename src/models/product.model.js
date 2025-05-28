@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { softDelete, toJSON } = require('./plugins/index.js');
+const { softDelete, paginate, toJSON } = require('./plugins/index.js');
 
 const productSchema = new mongoose.Schema(
   {
@@ -60,6 +60,7 @@ const productSchema = new mongoose.Schema(
 );
 
 productSchema.plugin(softDelete);
+productSchema.plugin(paginate);
 productSchema.plugin(toJSON);
 
 const Product = mongoose.model('Product', productSchema);
