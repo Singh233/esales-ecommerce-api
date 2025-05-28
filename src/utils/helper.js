@@ -17,7 +17,6 @@ const parseQueryParams = async (query) => {
     const [key, value] = entry;
     if (typeof value == 'string') {
       if (value == 'true') {
-
         parsedQuery[key] = true;
       } else if (value == 'false') {
         parsedQuery[key] = false;
@@ -36,7 +35,6 @@ const parseQueryParams = async (query) => {
   }
   return { ...query, ...parsedQuery };
 };
-
 
 const extractIPAndUserAgent = async (req) => {
   let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
@@ -57,7 +55,6 @@ const parseCookies = async (cookies) => {
   }
   return cookieObj;
 };
-
 
 module.exports = {
   parseQueryParams,

@@ -1,16 +1,7 @@
 const axios = require('axios');
 const sgMail = require('@sendgrid/mail');
-const { sendBugReport } = require('./slack.js');
 const logger = require('../config/logger');
 const config = require('../config/config.js');
-
-const validateEmail = (email) => {
-  return String(email)
-    .toLowerCase()
-    .match(
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-    );
-};
 
 sgMail.setApiKey(config.email.sendgridApiKey);
 
@@ -71,9 +62,6 @@ const sendTextMail = async (
     return result;
   } catch (error) {
     try {
-      if (validateEmail(toEmail)) {
-        await sendBugReport('Error while sending mail', [], error);
-      }
       logger.error(
         `Error while sending mail: toEmail: ${toEmail}, fromEmail: ${fromEmail}, fromName: ${fromName}, 
         error: ${JSON.stringify(error)}`,
