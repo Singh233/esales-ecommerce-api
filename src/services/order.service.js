@@ -2,6 +2,7 @@ const httpStatus = require('http-status');
 const ApiError = require('../utils/ApiError.js');
 const Order = require('../models/order.model.js');
 const Product = require('../models/product.model.js');
+const Cart = require('../models/cart.model.js');
 const emailService = require('./email.service.js');
 const logger = require('../config/logger.js');
 
@@ -52,6 +53,66 @@ const createOrder = async (orderBody) => {
       $inc: { quantity: -item.quantity },
     });
   }
+
+  return order.populate('items.product');
+};
+
+/**
+ * Create an order from cart
+ * @param {ObjectId} cartId
+ * @param {Object} orderData - Contact, shipping, and payment information
+ * @returns {Promise<Order>}
+ */
+const createOrderFromCart = async (cartId, orderData) => {
+  const cart = await Cart.findById(cartId).populate('items.product');
+  if (!cart) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Cart not found');
+  }
+
+  if (cart.items.length === 0) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Cart is empty');
+  }
+
+  // Validate products exist and have sufficient quantity
+  const validatedItems = [];
+  for (const item of cart.items) {
+    const product = await Product.findById(item.product._id);
+    if (!product) {
+      throw new ApiError(httpStatus.NOT_FOUND, `Product ${item.product.title} no longer exists`);
+    }
+
+    if (product.quantity < item.quantity) {
+      throw new ApiError(
+        httpStatus.BAD_REQUEST,
+        `Insufficient quantity for ${product.title}. Available: ${product.quantity}`,
+      );
+    }
+
+    validatedItems.push({
+      product: item.product._id,
+      quantity: item.quantity,
+      price: item.price,
+      color: item.color,
+      size: item.size,
+    });
+  }
+
+  const order = await Order.create({
+    ...orderData,
+    items: validatedItems,
+    totalAmount: cart.totalAmount,
+  });
+
+  // Reduce product quantities
+  for (const item of validatedItems) {
+    await Product.findByIdAndUpdate(item.product, {
+      $inc: { quantity: -item.quantity },
+    });
+  }
+
+  // Mark cart as converted
+  cart.status = 'converted';
+  await cart.save();
 
   return order.populate('items.product');
 };
@@ -160,6 +221,7 @@ const getUserOrders = async (email, options) => {
 
 module.exports = {
   createOrder,
+  createOrderFromCart,
   getOrder,
   updateOrderPaymentStatus,
   sendTransactionEmail,
