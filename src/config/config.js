@@ -40,7 +40,7 @@ module.exports = {
     password: envVars.REDIS_PASSWORD,
   },
   cors: {
-    allowedOrigins: envVars.CORS_ALLOWED,
+    allowedOrigins: envVars.CORS_ALLOWED.split(',').map((origin) => origin.trim()),
   },
   email: {
     host: envVars.EMAIL_HOST,

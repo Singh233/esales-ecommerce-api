@@ -22,9 +22,18 @@ const productSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
-    image: {
+    brand: {
       type: String,
       required: true,
+      trim: true,
+    },
+    images: {
+      type: [String],
+      required: true,
+      validate: {
+        validator: (v) => v.length > 0,
+        message: 'At least one image is required',
+      },
     },
     quantity: {
       type: Number,
