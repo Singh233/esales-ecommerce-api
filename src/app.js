@@ -10,23 +10,27 @@ const routes = require('./routes/index.js');
 const { errorConverter, errorHandler } = require('./middlewares/error.js');
 const ApiError = require('./utils/ApiError.js');
 const app = express();
+const { toNodeHandler } = require('better-auth/node');
+const { auth } = require('./config/auth.mjs');
 
 app.use(morgan);
 
 // set security HTTP headers
 app.use(helmet());
 
-// parse json request body
-app.use(express.json());
-
-// parse urlencoded request body
-app.use(express.urlencoded({ extended: true }));
-
 // sanitize request data
 app.use(mongoSanitize());
 
 // gzip compression
 app.use(compression());
+
+app.all('/api/auth/*', toNodeHandler(auth));
+
+// parse json request body
+app.use(express.json());
+
+// parse urlencoded request body
+app.use(express.urlencoded({ extended: true }));
 
 // enable cors
 app.use(
