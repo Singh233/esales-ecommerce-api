@@ -1,0 +1,117 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types:
+      - closed
+    branches:
+      - main
+
+jobs:
+  deploy:
+    if: github.event.pull_request.merged == true || github.event_name == 'push'
+    name: Deploy to Production Server
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Add host key
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
+
+      - name: Create and deploy with deployment script
+        env:
+          SERVER_USER: ${{ secrets.SERVER_USER }}
+          SERVER_IP: ${{ secrets.SERVER_IP }}
+        run: |
+          # Create deployment script
+          cat > deploy.sh << 'EOL'
+          #!/bin/bash
+
+          set -e
+
+          # Enable error tracing for better debugging
+          trap 'echo "Error occurred at line $LINENO. Command: $BASH_COMMAND"' ERR
+
+          # Log function for better visibility
+          log() {
+            echo "[$(date +'%Y-%m-%d %H:%M:%S')] $1"
+          }
+
+          log "Starting deployment process..."
+
+          # Navigate to the project directory
+          PROJECT_DIR="/root/esales-ecommerce-api"
+          cd $PROJECT_DIR
+
+          log "Pulling latest changes from repository..."
+          git fetch --all
+          git reset --hard origin/main
+          npm install
+
+          # Check if the node-app container is running and stop only that service
+          if docker compose ps | grep -q "node-app"; then
+            log "Stopping node-app service..."
+            docker compose stop node-app
+            docker compose rm -f node-app
+          fi
+
+          # Rebuild and start only the node-app service
+          log "Building and starting node-app service..."
+          docker compose -f docker-compose.prod.yml build node-app
+          docker compose -f docker-compose.prod.yml up -d node-app
+
+          # Wait for the API to become healthy
+          log "Waiting for API to become healthy..."
+          MAX_ATTEMPTS=10
+          ATTEMPT=1
+          DELAY=5
+
+          while [ $ATTEMPT -le $MAX_ATTEMPTS ]; do
+            log "Health check attempt ${ATTEMPT}/${MAX_ATTEMPTS}"
+            
+            # Check if container is running
+            if ! docker compose ps | grep -q "esales-ecommerce-api-node-app.*Up"; then
+              log "Error: API container is not running"
+              docker compose logs node-app
+              exit 1
+            fi
+            
+            # Try health endpoint
+            if curl -s -f "http://localhost:8000/health" -o /dev/null || curl -s -f "http://localhost:8000/v1/health" -o /dev/null; then
+              log "API is healthy!"
+              break
+            fi
+            
+            ATTEMPT=$((ATTEMPT+1))
+            log "API not yet healthy, waiting ${DELAY} seconds..."
+            sleep $DELAY
+          done
+
+          if [ $ATTEMPT -gt $MAX_ATTEMPTS ]; then
+            log "Error: API failed to become healthy after ${MAX_ATTEMPTS} attempts"
+            docker compose logs node-app
+            exit 1
+          fi
+
+          # Clean up old images
+          log "Cleaning up old Docker images..."
+          docker image prune -f
+
+          log "Deployment completed successfully!"
+          EOL
+
+          # Copy deployment script to server and execute
+          chmod +x deploy.sh
+          scp deploy.sh ${SERVER_USER}@${SERVER_IP}:/tmp/deploy.sh
+          ssh ${SERVER_USER}@${SERVER_IP} "chmod +x /tmp/deploy.sh && sudo /tmp/deploy.sh"

@@ -1,0 +1,52 @@
+services:
+  node-app:
+    container_name: esales-ecommerce-api
+    build: .
+    ports:
+      - '8000:8000'
+    depends_on:
+      - mongodb
+      - redis
+    volumes:
+      - ./logs:/app/logs
+      - ./public:/app/public
+    env_file:
+      - .env
+    restart: always
+    command: npm start
+    networks:
+      - node-network
+
+  mongodb:
+    image: mongo:latest
+    container_name: esales-ecommerce-mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+    volumes:
+      - dbdata:/data/db
+    networks:
+      - node-network
+    ports:
+      - '27017:27017'
+
+  redis:
+    image: redis:7-alpine
+    container_name: esales-ecommerce-redis
+    restart: always
+    command: redis-server --requirepass ${REDIS_PASSWORD} --save 60 1 --loglevel warning
+    volumes:
+      - redis_data:/data/redis
+    networks:
+      - node-network
+    ports:
+      - '6379:6379'
+
+volumes:
+  dbdata:
+  redis_data:
+
+networks:
+  node-network:
+    driver: bridge
