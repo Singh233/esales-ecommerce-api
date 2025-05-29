@@ -16,6 +16,10 @@ const createOrder = async (orderBody) => {
   let totalAmount = 0;
   const validatedItems = [];
 
+  if (orderBody.paymentStatus === 'failed') {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Payment status "declined" for a new order');
+  }
+
   for (const item of orderBody.items) {
     const product = await Product.findById(item.product);
     if (!product) {

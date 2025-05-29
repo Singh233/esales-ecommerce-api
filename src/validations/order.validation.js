@@ -35,6 +35,7 @@ const createOrder = {
       })
       .required(),
     paymentMethod: Joi.string().valid('credit_card', 'debit_card', 'paypal', 'stripe', 'cash_on_delivery').required(),
+    paymentStatus: Joi.string().valid('pending', 'paid', 'failed', 'refunded').default('pending'),
     notes: Joi.string().trim().optional(),
   }),
 };

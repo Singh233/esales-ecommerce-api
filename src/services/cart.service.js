@@ -4,8 +4,7 @@ const Cart = require('../models/cart.model.js');
 const Product = require('../models/product.model.js');
 
 /**
- * Get or create cart by sessionId or userEmail
- * @param {string} sessionId
+ * Get or create cart by userEmail
  * @param {string} userEmail
  * @returns {Promise<Cart>}
  */
@@ -15,7 +14,7 @@ const getOrCreateCart = async (userEmail) => {
   if (userEmail) {
     cart = await Cart.findOne({ userEmail, status: 'active' }).populate('items.product');
   } else {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'Either sessionId or userEmail must be provided');
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Either userEmail must be provided');
   }
 
   if (!cart) {
@@ -44,7 +43,6 @@ const getCartById = async (id) => {
 
 /**
  * Add item to cart
- * @param {string} sessionId
  * @param {string} userEmail
  * @param {Object} itemData
  * @returns {Promise<Cart>}
@@ -96,7 +94,6 @@ const addItemToCart = async (userEmail, itemData) => {
 
 /**
  * Update item quantity in cart
- * @param {string} sessionId
  * @param {string} userEmail
  * @param {string} itemId
  * @param {number} quantity
@@ -129,7 +126,6 @@ const updateCartItem = async (userEmail, itemId, quantity) => {
 
 /**
  * Remove item from cart
- * @param {string} sessionId
  * @param {string} userEmail
  * @param {string} itemId
  * @returns {Promise<Cart>}
