@@ -12,7 +12,25 @@ const getOrder = catchAsync(async (req, res) => {
   res.status(httpStatus.OK).json({ message: 'Order retrieved successfully', order });
 });
 
+const updateOrderPaymentStatus = catchAsync(async (req, res) => {
+  const order = await orderService.updateOrderPaymentStatus(req.params.id, req.body.paymentStatus);
+  res.status(httpStatus.OK).json({
+    message: 'Order payment status updated successfully',
+    order,
+  });
+});
+
+const sendTransactionEmail = catchAsync(async (req, res) => {
+  const result = await orderService.sendTransactionEmail(req.params.id, req.body.emailType);
+  res.status(httpStatus.OK).json({
+    message: 'Transaction email sent successfully',
+    result,
+  });
+});
+
 module.exports = {
   createOrder,
   getOrder,
+  updateOrderPaymentStatus,
+  sendTransactionEmail,
 };

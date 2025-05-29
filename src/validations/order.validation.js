@@ -45,7 +45,27 @@ const getOrder = {
   }),
 };
 
+const updatePaymentStatus = {
+  params: Joi.object().keys({
+    id: Joi.string().custom(objectId),
+  }),
+  body: Joi.object().keys({
+    paymentStatus: Joi.string().valid('pending', 'paid', 'failed', 'refunded').required(),
+  }),
+};
+
+const sendTransactionEmail = {
+  params: Joi.object().keys({
+    id: Joi.string().custom(objectId),
+  }),
+  body: Joi.object().keys({
+    emailType: Joi.string().valid('approved', 'failed').required(),
+  }),
+};
+
 module.exports = {
   createOrder,
   getOrder,
+  updatePaymentStatus,
+  sendTransactionEmail,
 };

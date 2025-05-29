@@ -12,6 +12,12 @@ const envVarsSchema = Joi.object()
     REDIS_PASSWORD: Joi.string().description('Redis password'),
     FRONTEND_URL: Joi.string().required().description('Frontend url'),
     CORS_ALLOWED: Joi.string().required().description('CORS allowed origins'),
+    EMAIL_HOST: Joi.string().description('Email SMTP host'),
+    EMAIL_PORT: Joi.number().default(587).description('Email SMTP port'),
+    EMAIL_USER: Joi.string().description('Email SMTP username'),
+    EMAIL_PASS: Joi.string().description('Email SMTP password'),
+    EMAIL_FROM: Joi.string().email().description('Email from address'),
+    EMAIL_FROM_NAME: Joi.string().description('Email from name'),
   })
   .unknown();
 
@@ -35,5 +41,13 @@ module.exports = {
   },
   cors: {
     allowedOrigins: envVars.CORS_ALLOWED,
+  },
+  email: {
+    host: envVars.EMAIL_HOST,
+    port: envVars.EMAIL_PORT,
+    user: envVars.EMAIL_USER,
+    pass: envVars.EMAIL_PASS,
+    from: envVars.EMAIL_FROM,
+    fromName: envVars.EMAIL_FROM_NAME,
   },
 };

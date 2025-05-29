@@ -2,6 +2,7 @@ const httpStatus = require('http-status');
 const express = require('express');
 const productRoute = require('./product.route.js');
 const orderRoute = require('./order.route.js');
+const webhookRoute = require('./webhook.route.js');
 
 const router = express.Router();
 
@@ -11,5 +12,6 @@ router.get('/health', (req, res) => {
 
 router.use('/products', productRoute);
 router.use('/orders', orderRoute);
+router.use('/webhooks', webhookRoute);
 
 module.exports = router;
