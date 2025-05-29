@@ -24,14 +24,6 @@ app.use(mongoSanitize());
 // gzip compression
 app.use(compression());
 
-app.all('/api/auth/*', toNodeHandler(auth));
-
-// parse json request body
-app.use(express.json());
-
-// parse urlencoded request body
-app.use(express.urlencoded({ extended: true }));
-
 // enable cors
 app.use(
   cors({
@@ -41,6 +33,14 @@ app.use(
 );
 
 app.options('*', cors());
+
+app.all('/api/auth/*', toNodeHandler(auth));
+
+// parse json request body
+app.use(express.json());
+
+// parse urlencoded request body
+app.use(express.urlencoded({ extended: true }));
 
 app.use('/v1', routes);
 
