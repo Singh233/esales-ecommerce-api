@@ -36,10 +36,14 @@ const createOrder = async (orderBody) => {
     });
   }
 
+  const count = await Order.countDocuments();
+  const orderNumber = `order-${Date.now()}-${(count + 1).toString().padStart(4, '0')}`;
+
   const order = await Order.create({
     ...orderBody,
     items: validatedItems,
     totalAmount,
+    orderNumber,
   });
 
   // Reduce product quantities

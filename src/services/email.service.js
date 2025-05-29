@@ -26,7 +26,7 @@ const createTransporter = () => {
 const generateApprovedTransactionTemplate = (order, products) => {
   const itemsHtml = order.items
     .map((item) => {
-      const product = products.find((p) => p._id.toString() === item.product.toString());
+      const product = products.find((p) => p.id.toString() === item.product.toString());
       return `
         <tr style="border-bottom: 1px solid #eee;">
           <td style="padding: 15px 10px;">
@@ -232,7 +232,7 @@ const generateFailedTransactionTemplate = (order) => {
 
           <!-- Action Buttons -->
           <div style="text-align: center; margin: 30px 0;">
-            <a href="${config.frontend_url}/retry-payment/${order._id}" 
+            <a href="${config.frontend_url}/retry-payment/${order.id}" 
                style="display: inline-block; background-color: #007bff; color: white; padding: 12px 30px; text-decoration: none; border-radius: 6px; font-weight: 600; margin: 10px;">
               Retry Payment
             </a>
