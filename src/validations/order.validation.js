@@ -63,9 +63,20 @@ const sendTransactionEmail = {
   }),
 };
 
+const getUserOrders = {
+  query: Joi.object().keys({
+    page: Joi.number().integer().min(1).default(1),
+    limit: Joi.number().integer().min(1).max(100).default(10),
+    sortBy: Joi.string(),
+    status: Joi.string().valid('pending', 'confirmed', 'shipped', 'delivered', 'cancelled'),
+    paymentStatus: Joi.string().valid('pending', 'paid', 'failed', 'refunded'),
+  }),
+};
+
 module.exports = {
   createOrder,
   getOrder,
   updatePaymentStatus,
   sendTransactionEmail,
+  getUserOrders,
 };

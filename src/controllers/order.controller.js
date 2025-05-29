@@ -28,9 +28,20 @@ const sendTransactionEmail = catchAsync(async (req, res) => {
   });
 });
 
+const getUserOrders = catchAsync(async (req, res) => {
+  const { ...options } = req.query;
+  const { email } = req;
+  const result = await orderService.getUserOrders(email, options);
+  res.status(httpStatus.OK).json({
+    message: 'Orders retrieved successfully',
+    ...result,
+  });
+});
+
 module.exports = {
   createOrder,
   getOrder,
   updateOrderPaymentStatus,
   sendTransactionEmail,
+  getUserOrders,
 };

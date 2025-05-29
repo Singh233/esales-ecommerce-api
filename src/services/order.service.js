@@ -129,9 +129,39 @@ const sendTransactionEmail = async (id, emailType) => {
   return result;
 };
 
+/**
+ * Get orders by email with pagination
+ * @param {string} email - Customer email
+ * @param {Object} options - Pagination options
+ * @returns {Promise<Object>}
+ */
+const getUserOrders = async (email, options) => {
+  const filter = { 'contact.email': email.toLowerCase() };
+
+  // Add optional filters
+  if (options.status) {
+    filter.status = options.status;
+  }
+  if (options.paymentStatus) {
+    filter.paymentStatus = options.paymentStatus;
+  }
+
+  // Set default pagination options
+  const paginationOptions = {
+    page: options.page || 1,
+    limit: options.limit || 10,
+    sortBy: options.sortBy || 'createdAt:desc',
+    populate: 'items.product',
+  };
+
+  const result = await Order.paginate(filter, paginationOptions);
+  return result;
+};
+
 module.exports = {
   createOrder,
   getOrder,
   updateOrderPaymentStatus,
   sendTransactionEmail,
+  getUserOrders,
 };
