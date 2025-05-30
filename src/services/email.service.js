@@ -263,14 +263,14 @@ const generateWelcomeTemplate = (user) => {
     <head>
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Welcome to eSales!</title>
+      <title>Welcome to family!</title>
     </head>
     <body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f8f9fa;">
       <div style="max-width: 600px; margin: 0 auto; background-color: white; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
         
         <!-- Header -->
         <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 40px 30px; text-align: center;">
-          <h1 style="margin: 0; font-size: 32px; font-weight: 700;">Welcome to eSales! 🎉</h1>
+          <h1 style="margin: 0; font-size: 32px; font-weight: 700;">Welcome to family! 🎉</h1>
           <p style="margin: 15px 0 0 0; font-size: 18px; opacity: 0.9;">We're excited to have you join our community</p>
         </div>
 
@@ -457,7 +457,7 @@ const sendFailedTransactionEmail = async (order) => {
  */
 const sendWelcomeEmail = async (user) => {
   try {
-    const subject = `Welcome to eSales, ${user.name ? user.name.split(' ')[0] : 'there'}! 🎉`;
+    const subject = `Welcome to family, ${user.name ? user.name.split(' ')[0] : 'there'}! 🎉`;
     const html = generateWelcomeTemplate(user);
 
     return await sendEmail(user.email, subject, html);
