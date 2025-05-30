@@ -263,124 +263,79 @@ const generateWelcomeTemplate = (user) => {
     <head>
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Welcome to family!</title>
+      <title>Welcome to eSales</title>
     </head>
-    <body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f8f9fa;">
-      <div style="max-width: 600px; margin: 0 auto; background-color: white; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+    <body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #ffffff;">
+      <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff;">
         
         <!-- Header -->
-        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 40px 30px; text-align: center;">
-          <h1 style="margin: 0; font-size: 32px; font-weight: 700;">Welcome to family! 🎉</h1>
-          <p style="margin: 15px 0 0 0; font-size: 18px; opacity: 0.9;">We're excited to have you join our community</p>
+        <div style="background-color: #4a90e2; color: #ffffff; padding: 30px 20px; text-align: center;">
+          <h1 style="margin: 0; font-size: 28px; font-weight: normal;">Welcome to eSales</h1>
+          <p style="margin: 15px 0 0 0; font-size: 16px;">Thank you for joining our community</p>
         </div>
 
         <!-- Welcome Content -->
-        <div style="padding: 40px 30px;">
+        <div style="padding: 30px 20px;">
           <!-- Personal Greeting -->
-          <div style="text-align: center; margin-bottom: 35px;">
-            <h2 style="margin: 0 0 15px 0; color: #333; font-size: 24px;">Hi ${firstName}! 👋</h2>
-            <p style="margin: 0; color: #666; font-size: 16px; line-height: 1.6;">
-              Thank you for creating your eSales account. You're now part of a community that values quality products and exceptional shopping experiences.
+          <div style="margin-bottom: 25px;">
+            <h2 style="margin: 0 0 15px 0; color: #333333; font-size: 22px; font-weight: normal;">Hello ${firstName},</h2>
+            <p style="margin: 0; color: #555555; font-size: 16px; line-height: 1.5;">
+              Your eSales account has been successfully created. We appreciate you choosing us for your online shopping needs.
             </p>
           </div>
 
           <!-- Account Details -->
-          <div style="background-color: #f8f9fa; border-radius: 8px; padding: 25px; margin-bottom: 30px; border-left: 4px solid #667eea;">
-            <h3 style="margin: 0 0 15px 0; color: #333; font-size: 18px;">Your Account Details</h3>
-            <p style="margin: 5px 0; color: #666;"><strong>Email:</strong> ${user.email}</p>
-            <p style="margin: 5px 0; color: #666;"><strong>Account Created:</strong> ${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', dateStyle: 'full', timeStyle: 'short' })}</p>
+          <div style="background-color: #f9f9f9; padding: 20px; margin-bottom: 25px; border: 1px solid #e0e0e0;">
+            <h3 style="margin: 0 0 15px 0; color: #333333; font-size: 18px; font-weight: normal;">Account Information</h3>
+            <p style="margin: 5px 0; color: #555555;">Email: ${user.email}</p>
+            <p style="margin: 5px 0; color: #555555;">Created: ${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', dateStyle: 'medium' })}</p>
           </div>
 
-          <!-- What's Next -->
-          <div style="margin-bottom: 30px;">
-            <h3 style="margin: 0 0 20px 0; color: #333; font-size: 20px; text-align: center;">What's Next?</h3>
+          <!-- Getting Started -->
+          <div style="margin-bottom: 25px;">
+            <h3 style="margin: 0 0 15px 0; color: #333333; font-size: 18px; font-weight: normal;">Getting Started</h3>
             
-            <div style="display: grid; gap: 20px;">
-              <!-- Feature 1 -->
-              <div style="display: flex; align-items: flex-start; padding: 20px; background-color: #fff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                <div style="width: 40px; height: 40px; background-color: #e8f4fd; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; flex-shrink: 0;">
-                  <span style="color: #007bff; font-size: 18px;">🛍️</span>
-                </div>
-                <div>
-                  <h4 style="margin: 0 0 8px 0; color: #333; font-size: 16px;">Browse Our Products</h4>
-                  <p style="margin: 0; color: #666; font-size: 14px; line-height: 1.5;">Discover thousands of quality products across various categories with competitive prices.</p>
-                </div>
-              </div>
+            <div style="margin-bottom: 15px;">
+              <h4 style="margin: 0 0 5px 0; color: #333333; font-size: 16px; font-weight: normal;">Browse Products</h4>
+              <p style="margin: 0; color: #555555; font-size: 14px; line-height: 1.4;">Explore our wide selection of quality products across different categories.</p>
+            </div>
 
-              <!-- Feature 2 -->
-              <div style="display: flex; align-items: flex-start; padding: 20px; background-color: #fff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                <div style="width: 40px; height: 40px; background-color: #e8f5e8; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; flex-shrink: 0;">
-                  <span style="color: #28a745; font-size: 18px;">🛒</span>
-                </div>
-                <div>
-                  <h4 style="margin: 0 0 8px 0; color: #333; font-size: 16px;">Easy Shopping Cart</h4>
-                  <p style="margin: 0; color: #666; font-size: 14px; line-height: 1.5;">Add items to your cart and checkout seamlessly with multiple payment options.</p>
-                </div>
-              </div>
+            <div style="margin-bottom: 15px;">
+              <h4 style="margin: 0 0 5px 0; color: #333333; font-size: 16px; font-weight: normal;">Manage Orders</h4>
+              <p style="margin: 0; color: #555555; font-size: 14px; line-height: 1.4;">Track your purchases and manage your order history easily.</p>
+            </div>
 
-              <!-- Feature 3 -->
-              <div style="display: flex; align-items: flex-start; padding: 20px; background-color: #fff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                <div style="width: 40px; height: 40px; background-color: #fff3cd; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; flex-shrink: 0;">
-                  <span style="color: #856404; font-size: 18px;">📦</span>
-                </div>
-                <div>
-                  <h4 style="margin: 0 0 8px 0; color: #333; font-size: 16px;">Track Your Orders</h4>
-                  <p style="margin: 0; color: #666; font-size: 14px; line-height: 1.5;">Monitor your order status and get real-time updates on deliveries.</p>
-                </div>
-              </div>
+            <div style="margin-bottom: 15px;">
+              <h4 style="margin: 0 0 5px 0; color: #333333; font-size: 16px; font-weight: normal;">Customer Support</h4>
+              <p style="margin: 0; color: #555555; font-size: 14px; line-height: 1.4;">Our support team is available to assist you with any questions.</p>
             </div>
           </div>
 
-          <!-- Action Buttons -->
-          <div style="text-align: center; margin: 35px 0;">
+          <!-- Action Button -->
+          <div style="text-align: center; margin: 30px 0;">
             <a href="${config.frontend_url}/" 
-               style="display: inline-block; background-color: #667eea; color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; font-weight: 600; margin: 10px; font-size: 16px; box-shadow: 0 2px 4px rgba(102, 126, 234, 0.3);">
-              Start Shopping
+               style="display: inline-block; background-color: #4a90e2; color: #ffffff; padding: 12px 24px; text-decoration: none; font-size: 16px; border: 1px solid #4a90e2;">
+              Visit eSales
             </a>
-            <a href="${config.frontend_url}/orders" 
-               style="display: inline-block; background-color: #6c757d; color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; font-weight: 600; margin: 10px; font-size: 16px;">
-              View Orders
-            </a>
-          </div>
-
-          <!-- Tips Section -->
-          <div style="background: linear-gradient(135deg, #e8f5e8 0%, #f0f8f0 100%); border-radius: 8px; padding: 25px; margin: 30px 0; border-left: 4px solid #28a745;">
-            <h3 style="margin: 0 0 15px 0; color: #155724; font-size: 18px;">💡 Pro Tips for Better Shopping</h3>
-            <ul style="color: #155724; margin: 0; padding-left: 20px; line-height: 1.8;">
-              <li>Add items to your wishlist to save them for later</li>
-              <li>Check out our daily deals and special offers</li>
-              <li>Follow us on social media for exclusive discounts</li>
-              <li>Enable email notifications for order updates</li>
-            </ul>
           </div>
 
           <!-- Support Information -->
-          <div style="text-align: center; background-color: #f8f9fa; border-radius: 8px; padding: 25px; margin-top: 30px;">
-            <h4 style="margin: 0 0 15px 0; color: #333; font-size: 18px;">Need Help Getting Started?</h4>
-            <p style="margin: 0 0 15px 0; color: #666; line-height: 1.6;">
-              Our friendly support team is here to help you with any questions or concerns.
+          <div style="background-color: #f9f9f9; padding: 20px; margin-top: 25px; border: 1px solid #e0e0e0;">
+            <h4 style="margin: 0 0 10px 0; color: #333333; font-size: 16px; font-weight: normal;">Contact Us</h4>
+            <p style="margin: 0 0 10px 0; color: #555555; line-height: 1.4;">
+              If you need assistance, our customer service team is ready to help.
             </p>
-            <div style="margin-top: 15px;">
-              <p style="margin: 5px 0; color: #666;"><strong>📧 Email:</strong> support@esales.com</p>
-              <p style="margin: 5px 0; color: #666;"><strong>📞 Phone:</strong> 1-800-555-0123</p>
-              <p style="margin: 5px 0; color: #666;"><strong>💬 Live Chat:</strong> Available 24/7 on our website</p>
-            </div>
+            <p style="margin: 5px 0; color: #555555;">Email: support@esales.com</p>
+            <p style="margin: 5px 0; color: #555555;">Phone: 1-800-555-0123</p>
           </div>
         </div>
 
         <!-- Footer -->
-        <div style="background-color: #f8f9fa; padding: 25px 30px; text-align: center; border-top: 1px solid #eee;">
-          <div style="margin-bottom: 15px;">
-            <a href="${config.frontend_url}/" style="color: #667eea; text-decoration: none; margin: 0 10px;">Home</a>
-            <a href="${config.frontend_url}/products" style="color: #667eea; text-decoration: none; margin: 0 10px;">Products</a>
-            <a href="${config.frontend_url}/contact" style="color: #667eea; text-decoration: none; margin: 0 10px;">Contact</a>
-            <a href="${config.frontend_url}/help" style="color: #667eea; text-decoration: none; margin: 0 10px;">Help</a>
-          </div>
-          <p style="margin: 0; color: #666; font-size: 14px; line-height: 1.6;">
-            You're receiving this email because you created an account with eSales.<br>
-            If you have any questions, feel free to contact our support team.
+        <div style="background-color: #f0f0f0; padding: 20px; text-align: center; border-top: 1px solid #e0e0e0;">
+          <p style="margin: 0 0 10px 0; color: #666666; font-size: 14px;">
+            This email was sent because you created an account with eSales.
           </p>
-          <p style="margin: 10px 0 0 0; color: #999; font-size: 12px;">
+          <p style="margin: 0; color: #999999; font-size: 12px;">
             © 2025 eSales. All rights reserved.
           </p>
         </div>
