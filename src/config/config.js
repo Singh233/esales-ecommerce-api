@@ -20,6 +20,8 @@ const envVarsSchema = Joi.object()
     EMAIL_FROM_NAME: Joi.string().description('Email from name'),
     BETTER_AUTH_URL: Joi.string().uri().description('BetterAuth URL for authentication'),
     BETTER_AUTH_SECRET: Joi.string().description('BetterAuth secret for authentication'),
+    EMAIL_DOMAIN: Joi.string().description('Email domain for sending emails'),
+    MAILGUN_API_KEY: Joi.string().description('Mailgun API key for sending emails'),
   })
   .unknown();
 
@@ -51,6 +53,8 @@ module.exports = {
     pass: envVars.EMAIL_PASSWORD,
     from: envVars.EMAIL_FROM,
     fromName: envVars.EMAIL_FROM_NAME,
+    domain: envVars.EMAIL_DOMAIN,
+    mailgunApiKey: envVars.MAILGUN_API_KEY,
   },
   betterAuth: {
     url: envVars.BETTER_AUTH_URL,

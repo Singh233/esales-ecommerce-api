@@ -1,21 +1,10 @@
-const nodemailer = require('nodemailer');
 const config = require('../config/config.js');
 const logger = require('../config/logger.js');
+const Mailgun = require('mailgun.js');
+const formData = require('form-data');
 
-/**
- * Create email transporter using nodemailer
- */
-const createTransporter = () => {
-  return nodemailer.createTransport({
-    host: config.email.host,
-    port: config.email.port,
-    secure: false, // true for 465, false for other ports
-    auth: {
-      user: config.email.user,
-      pass: config.email.pass,
-    },
-  });
-};
+const mailgun = new Mailgun(formData);
+const mg = mailgun.client({ username: 'api', key: config.email.mailgunApiKey || 'key-yourkeyhere' });
 
 /**
  * Generate HTML template for approved transaction email
@@ -410,19 +399,17 @@ const generateWelcomeTemplate = (user) => {
  * @returns {Promise<Object>} - Email send result
  */
 const sendEmail = async (to, subject, html, text = null) => {
+  const mailOptions = {
+    from: `${config.email.fromName} <${config.email.from}>`,
+    to: [to],
+    subject,
+    html,
+    text: text || html.replace(/<[^>]*>/g, ''), // Strip HTML tags for text version
+  };
   try {
-    const transporter = createTransporter();
+    const result = await mg.messages.create(config.email.domain, mailOptions);
 
-    const mailOptions = {
-      from: `${config.email.fromName} <${config.email.from}>`,
-      to,
-      subject,
-      html,
-      text: text || html.replace(/<[^>]*>/g, ''), // Strip HTML tags for text version
-    };
-
-    const result = await transporter.sendMail(mailOptions);
-    logger.info(`Email sent successfully to ${to}: ${result.messageId}`);
+    logger.info(`Email sent successfully to ${to}`);
     return result;
   } catch (error) {
     logger.error(`Failed to send email to ${to}:`, error);
