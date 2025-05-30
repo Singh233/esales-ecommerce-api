@@ -10,7 +10,4 @@ router.post('/payment/success', validate(webhookValidation.paymentSuccess), webh
 router.post('/payment/failure', validate(webhookValidation.paymentFailure), webhookController.handlePaymentFailure);
 router.post('/payment/pending', validate(webhookValidation.paymentPending), webhookController.handlePaymentPending);
 
-// Test endpoint for development
-router.post('/test/email', validate(webhookValidation.testEmail), webhookController.testEmailSending);
-
 module.exports = router;

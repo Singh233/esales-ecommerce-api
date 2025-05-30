@@ -4,6 +4,7 @@ import { mongodbAdapter } from 'better-auth/adapters/mongodb';
 import { nextCookies } from 'better-auth/next-js';
 
 import config from './config.js';
+import logger from './logger.js';
 
 const client = new MongoClient(config.mongoose.url);
 const db = client.db();
@@ -17,8 +18,13 @@ export const auth = betterAuth({
   databaseHooks: {
     user: {
       create: {
-        after: async () => {
-          // TODO: Send welcome email
+        after: async (user) => {
+          try {
+            const { sendWelcomeEmail } = await import('../services/email.service.js');
+            sendWelcomeEmail(user);
+          } catch (error) {
+            logger.error('Error sending welcome email:', error);
+          }
         },
       },
     },

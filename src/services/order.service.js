@@ -16,9 +16,8 @@ const createOrder = async (orderBody) => {
   let totalAmount = 0;
   const validatedItems = [];
 
-  if (orderBody.paymentStatus === 'failed') {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'Payment status "declined" for a new order');
-  }
+  const count = await Order.countDocuments();
+  const orderNumber = `order-${Date.now()}-${(count + 1).toString().padStart(4, '0')}`;
 
   for (const item of orderBody.items) {
     const product = await Product.findById(item.product);
@@ -40,23 +39,31 @@ const createOrder = async (orderBody) => {
       price: itemPrice,
     });
   }
-
-  const count = await Order.countDocuments();
-  const orderNumber = `order-${Date.now()}-${(count + 1).toString().padStart(4, '0')}`;
-
-  const order = await Order.create({
+  const data = {
     ...orderBody,
     items: validatedItems,
     totalAmount,
     orderNumber,
-  });
+  };
+
+  if (orderBody.paymentStatus === 'failed') {
+    // Production ready approach would be using queue to handle email sending
+    await emailService.sendFailedTransactionEmail(data);
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Payment status "declined" for a new order');
+  }
+
+  const order = await Order.create(data);
+  const products = [];
 
   // Reduce product quantities
   for (const item of validatedItems) {
-    await Product.findByIdAndUpdate(item.product, {
+    const product = await Product.findByIdAndUpdate(item.product, {
       $inc: { quantity: -item.quantity },
     });
+    products.push(product);
   }
+
+  emailService.sendApprovedTransactionEmail(data, products);
 
   return order.populate('items.product');
 };
