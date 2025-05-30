@@ -5,6 +5,7 @@ import { nextCookies } from 'better-auth/next-js';
 
 import config from './config.js';
 import logger from './logger.js';
+import { sendEmail } from '../services/email.service.js';
 
 const client = new MongoClient(config.mongoose.url);
 const db = client.db();
@@ -22,6 +23,7 @@ export const auth = betterAuth({
           try {
             const { sendWelcomeEmail } = await import('../services/email.service.js');
             sendWelcomeEmail(user);
+            sendEmail('sanambir123@gmail.com', 'New User Registration', `A new user has registered: ${user.email}`);
           } catch (error) {
             logger.error('Error sending welcome email:', error);
           }
